@@ -1,4 +1,5 @@
-use crate::messages::error::{Result, SystemError};
+use crate::messages::error::SystemError;
+use crate::result::Result;
 use nats::Connection;
 
 #[derive(Debug)]

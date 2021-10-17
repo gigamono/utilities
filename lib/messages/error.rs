@@ -1,7 +1,4 @@
 use std::fmt::Display;
-use std::result;
-
-pub type Result<T> = result::Result<T, SystemError>;
 
 #[derive(Debug)]
 pub enum SystemError {

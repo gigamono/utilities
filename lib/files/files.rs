@@ -1,4 +1,5 @@
-use crate::messages::error::{Result, SystemError};
+use crate::messages::error::SystemError;
+use crate::result::Result;
 use std::fs::{File, OpenOptions};
 
 pub fn open_or_create(path: &str, append: bool) -> Result<File> {

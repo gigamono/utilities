@@ -1,5 +1,6 @@
 use super::config::Meta;
-use crate::messages::error::{Result, SystemError};
+use crate::messages::error::SystemError;
+use crate::result::Result;
 use serde::Deserialize;
 use std::{env, fs};
 

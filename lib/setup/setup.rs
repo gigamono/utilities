@@ -1,7 +1,7 @@
 use crate::broker::BrokerClient;
 use crate::config::GigamonoConfig;
 use crate::database::DB;
-use crate::messages::error::Result;
+use crate::result::Result;
 
 use diesel::sqlite::SqliteConnection;
 
