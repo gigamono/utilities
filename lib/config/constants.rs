@@ -1,0 +1,1 @@
+pub const GIGAMONO_CONFIG_PATH_ENV_VAR: &'static str = "GIGAMONO_CONFIG_PATH";
