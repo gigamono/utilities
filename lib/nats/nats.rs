@@ -1,15 +1,15 @@
 use crate::messages::error::SystemError;
 use crate::result::Result;
-use nats::Connection;
+use nats_lib::Connection;
 
 #[derive(Debug)]
-pub struct BrokerClient {
-    conn: Connection,
+pub struct Nats {
+    pub conn: Connection,
 }
 
-impl BrokerClient {
+impl Nats {
     pub fn connect(nats_url: &str) -> Result<Self> {
-        let conn = nats::connect(nats_url).map_err(|err| SystemError::Io {
+        let conn = nats_lib::connect(nats_url).map_err(|err| SystemError::Io {
             ctx: format!("connecting to broker, `{}`", nats_url),
             src: err,
         })?;
