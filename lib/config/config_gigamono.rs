@@ -27,7 +27,7 @@ pub struct Subscriptions {
 
 #[derive(Debug, Deserialize)]
 pub struct EnabledSubscriptions {
-    version: usize,
+    pub version: u16,
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,22 +38,19 @@ pub struct Engines {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct API {
     pub port: u16,
     pub db_url: String,
-    pub reply_timeout: usize,
+    pub reply_timeout: u64,
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Backend {
     pub root_path: String,
     pub subscriptions: BackendSubscriptions,
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct DB {
     pub db_url: String,
     pub subscriptions: DBSubscriptions,
@@ -71,18 +68,12 @@ pub struct DBSubscriptions {
 
 #[derive(Debug, Deserialize)]
 pub struct BackendWorkspaces {
-    pub run: EngineSubscriptions,
+    pub run_surl: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DBWorkspaces {
-    pub query: EngineSubscriptions,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct EngineSubscriptions {
-    pub subscribed_id: String,
+    pub query: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -91,7 +82,6 @@ pub struct UI {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Logs {
     pub file: String,
     pub is_published: String,
@@ -110,12 +100,12 @@ impl GigamonoConfig {
         let env_var = super::constants::GIGAMONO_CONFIG_PATH_ENV_VAR;
 
         let path = env::var(env_var).map_err(|err| SystemError::EnvVar {
-            ctx: format!("fetching gigamono config env var, `{}`", env_var),
+            ctx: format!(r#"fetching gigamono config env var, "{}""#, env_var),
             src: err,
         })?;
 
         let file_content = fs::read_to_string(&path).map_err(|err| SystemError::Io {
-            ctx: format!("reading gigamono config file, `{}`", &path),
+            ctx: format!(r#"reading gigamono config file, "{}""#, &path),
             src: err,
         })?;
 

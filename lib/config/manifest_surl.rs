@@ -4,7 +4,6 @@ use crate::result::Result;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct SurlManifest {
     pub meta: Meta,
     pub middleware_scripts: Vec<String>,

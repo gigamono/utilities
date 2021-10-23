@@ -11,7 +11,7 @@ pub fn open_or_create(path: &str, append: bool) -> Result<File> {
         .open(path)
         .map_err(|err| SystemError::Io {
             ctx: format!(
-                "opening file with the possibility of creating it if it doesn't exist, `{}`",
+                r#"opening file with the possibility of creating it if it doesn't exist, "{}""#,
                 path
             ),
             src: err,
