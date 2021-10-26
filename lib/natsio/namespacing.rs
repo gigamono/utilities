@@ -29,3 +29,19 @@ pub fn get_workpace_subject<'a>(
     };
     format!("v{}.{}.workspaces{}", version, action, tail)
 }
+
+pub fn get_backend_first_sub_target<'a>(
+    config: &'a GigamonoConfig,
+    action: WorkspacesAction,
+) -> Option<&'a str> {
+    match action {
+        WorkspacesAction::RunSurl => {
+            let ids = &config.engines.backend.subscriptions.workspaces.run_surl;
+            if !ids.is_empty() {
+                Some(&ids[0])
+            } else {
+                None
+            }
+        }
+    }
+}

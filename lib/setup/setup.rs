@@ -2,7 +2,7 @@ use std::sync::Mutex;
 
 use crate::config::GigamonoConfig;
 use crate::database::DB;
-use crate::nats::Nats;
+use crate::natsio::Nats;
 use crate::result::Result;
 
 use diesel::pg::PgConnection;

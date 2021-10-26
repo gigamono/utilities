@@ -1,4 +1,4 @@
-pub mod nats;
+pub mod natsio;
 pub mod config;
 pub mod database;
 pub mod files;
