@@ -1,4 +1,26 @@
 /// Provides a nice way of expressing nested structs but defines all of them at the top-level.
+///
+/// You need `use serde::Deserialize;` to use this because it was written to make yaml config structs easier to write.
+/// Feel free to generalize it.
+///
+/// ### EXAMPLE
+///
+/// ```rust
+/// use serde::Deserialize;
+/// use crate::nested_struct;
+///
+/// nested_struct! {
+///     Config {
+///         port (u16),
+///         subscriptions (Subscription {
+///             subject (String),
+///             responder (String)
+///         }),
+///         address (String),
+///     }
+/// }
+/// ```
+
 #[macro_export]
 macro_rules! nested_struct {
     // This matches the type part of a field of in a struct.
