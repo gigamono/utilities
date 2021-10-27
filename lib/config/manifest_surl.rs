@@ -1,12 +1,15 @@
-use super::config::Meta;
+use super::config::{Meta, Permissions};
 use crate::messages::error::SystemError;
+use crate::nested_struct;
 use crate::result::Result;
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
-pub struct SurlManifest {
-    pub meta: Meta,
-    pub middleware_scripts: Vec<String>,
+nested_struct! {
+    SurlManifest {
+        meta (Meta),
+        permissions (Permissions),
+        middlewares (Vec<String>),
+    }
 }
 
 impl SurlManifest {

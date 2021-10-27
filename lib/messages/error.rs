@@ -73,10 +73,8 @@ pub enum HandlerError {
         code: StatusCode,
         src: SystemError,
     },
-    // For cases where the handler can't even send a response back.
-    Critical {
-        src: SystemError,
-    },
+    /// For cases where the handler can't even send a response back but we have to return a HandlerError anyway.
+    Critical { src: SystemError },
 }
 
 #[derive(Debug, EnumMessage)]
@@ -89,6 +87,8 @@ pub enum HandlerErrorMessage {
     InvalidWorkspaceName,
     #[strum(message = "bad request")]
     BadRequest,
+    #[strum(message = "one of authorisation or middleware failed")]
+    AuthMiddleware,
 }
 
 impl Display for SystemError {

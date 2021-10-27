@@ -1,90 +1,57 @@
 use super::config::Meta;
 use crate::messages::error::SystemError;
 use crate::result::Result;
+use crate::nested_struct;
 use serde::Deserialize;
 use std::{env, fs};
 
-#[derive(Debug, Deserialize)]
-pub struct GigamonoConfig {
-    pub meta: Meta,
-    pub broker: Broker,
-    pub engines: Engines,
-    pub ui: UI,
-    pub logs: Logs,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Broker {
-    pub url: String,
-    pub subscriptions: Subscriptions,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Subscriptions {
-    pub workspaces: EnabledSubscriptions,
-    pub logs: EnabledSubscriptions,
+nested_struct! {
+    GigamonoConfig {
+        meta (Meta),
+        broker (Broker {
+            url (String),
+            subscriptions (Subscriptions {
+                workspaces (EnabledSubscriptions),
+                logs (EnabledSubscriptions),
+            }),
+        }),
+        engines (Engines {
+            api (API {
+                port (u16),
+                db_url (String),
+                reply_timeout (u64),
+            }),
+            backend (Backend {
+                root_path (String),
+                subscriptions (BackendSubscriptions {
+                    workspaces (BackendWorkspaces {
+                        run_surl (Vec<String>),
+                    }),
+                }),
+            }),
+            db (DB {
+                db_url (String),
+                subscriptions (DBSubscriptions {
+                    workspaces (DBWorkspaces {
+                        query (Vec<String>),
+                    }),
+                }),
+            }),
+        }),
+        ui (UI {
+            dir (String),
+        }),
+        logs (Logs {
+            file (String),
+            is_published (String),
+        }),
+        domain (String),
+    }
 }
 
 #[derive(Debug, Deserialize)]
 pub struct EnabledSubscriptions {
     pub version: u16,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Engines {
-    pub api: API,
-    pub backend: Backend,
-    pub db: DB,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct API {
-    pub port: u16,
-    pub db_url: String,
-    pub reply_timeout: u64,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Backend {
-    pub root_path: String,
-    pub subscriptions: BackendSubscriptions,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct DB {
-    pub db_url: String,
-    pub subscriptions: DBSubscriptions,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct BackendSubscriptions {
-    pub workspaces: BackendWorkspaces,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct DBSubscriptions {
-    pub workspaces: DBWorkspaces,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct BackendWorkspaces {
-    pub run_surl: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct DBWorkspaces {
-    pub query: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct UI {
-    pub dir: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Logs {
-    pub file: String,
-    pub is_published: String,
 }
 
 impl GigamonoConfig {

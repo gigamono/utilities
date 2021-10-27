@@ -6,3 +6,4 @@ pub mod messages;
 pub mod result;
 pub mod setup;
 pub mod http;
+pub mod macros;
