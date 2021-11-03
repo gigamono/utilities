@@ -1,7 +1,6 @@
 use super::config::{Meta, Permissions};
-use crate::messages::error::SystemError;
 use crate::nested_struct;
-use crate::result::Result;
+use crate::result::{Context, Result};
 use serde::Deserialize;
 
 nested_struct! {
@@ -14,10 +13,7 @@ nested_struct! {
 
 impl SurlManifest {
     pub fn new(config_str: &String) -> Result<Self> {
-        serde_yaml::from_str(&config_str).map_err(|err| SystemError::Yaml {
-            ctx: "deserializing surl manifest".to_string(),
-            src: err,
-        })
+        serde_yaml::from_str(&config_str).context("deserializing surl manifest")
     }
 
     pub fn load_config() -> Self {

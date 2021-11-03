@@ -611,9 +611,7 @@ checksum = "3ee2393c4a91429dffb4bedf19f4d6abf27d8a732c8ce4980305d782e5426d57"
 
 [[package]]
 name = "deno_core"
-version = "0.103.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "441bd46d682da83dfc1bafd36a5800d8c745157b75aaebe6b6db317d608d52e7"
+version = "0.105.0"
 dependencies = [
  "anyhow",
  "futures",
@@ -622,11 +620,11 @@ dependencies = [
  "log",
  "parking_lot",
  "pin-project 1.0.8",
- "rusty_v8",
  "serde",
  "serde_json",
  "serde_v8",
  "url",
+ "v8",
 ]
 
 [[package]]
@@ -1708,19 +1706,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rusty_v8"
-version = "0.32.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2b311db3661f6b7631f94ad431133ff0f299c423e6bcc35b748ad0d57d6e604"
-dependencies = [
- "bitflags",
- "fslock",
- "lazy_static",
- "libc",
- "which",
-]
-
-[[package]]
 name = "ryu"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1854,12 +1839,10 @@ dependencies = [
 
 [[package]]
 name = "serde_v8"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b431c505c5ece0caf45ffa6d089d6da7c675303aa82f8cccb76135bb1bc6a2b0"
+version = "0.16.0"
 dependencies = [
- "rusty_v8",
  "serde",
+ "v8",
 ]
 
 [[package]]
@@ -2367,6 +2350,7 @@ name = "utilities"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "anyhow",
  "bincode",
  "deno_core",
  "diesel",
@@ -2384,6 +2368,19 @@ name = "uuid"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
+
+[[package]]
+name = "v8"
+version = "0.33.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b3adb16fd1af3e28d6fda8348a6d96b5363a128dc5a0216b137b64ecbae6641"
+dependencies = [
+ "bitflags",
+ "fslock",
+ "lazy_static",
+ "libc",
+ "which",
+]
 
 [[package]]
 name = "vcpkg"

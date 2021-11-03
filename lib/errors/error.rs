@@ -4,62 +4,19 @@ use actix_web::{
     http::{header, StatusCode},
     web::{BytesMut, HttpResponse},
 };
-use std::fmt::{Display, Write};
+use std::{
+    borrow::Cow,
+    error::Error,
+    fmt::{Display, Write},
+};
 use strum::EnumMessage;
 use strum_macros::EnumMessage;
 
+pub type SystemError = anyhow::Error;
+
 #[derive(Debug)]
-pub enum SystemError {
-    System {
-        ctx: String,
-        src: Box<SystemError>,
-    },
-    Io {
-        ctx: String,
-        src: std::io::Error,
-    },
-    Yaml {
-        ctx: String,
-        src: serde_yaml::Error,
-    },
-    EnvVar {
-        ctx: String,
-        src: std::env::VarError,
-    },
-    Conn {
-        ctx: String,
-        src: diesel::result::ConnectionError,
-    },
-    Join {
-        ctx: String,
-        src: tokio::task::JoinError,
-    },
-    Generic {
-        ctx: String,
-    },
-    ToStr {
-        ctx: String,
-        src: actix_web::http::header::ToStrError,
-    },
-    Diesel {
-        ctx: String,
-        src: diesel::result::Error,
-    },
-    ActixWeb {
-        ctx: String,
-        src: String, // Can't use `actix_web::Error` because it is !Send and gives tokio problem https://gist.github.com/appcypher/09eada7309a0be6835778049099401f4
-    },
-    Uuid {
-        ctx: String,
-        src: uuid::Error,
-    },
-    DenoAny {
-        ctx: String,
-        src: deno_core::error::AnyError,
-    },
-    Poison {
-        ctx: String,
-    },
+pub enum CustomError {
+    Any(Cow<'static, str>),
 }
 
 #[derive(Debug)]
@@ -91,22 +48,12 @@ pub enum HandlerErrorMessage {
     AuthMiddleware,
 }
 
-impl Display for SystemError {
+impl Error for CustomError {}
+
+impl Display for CustomError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Self::System { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Io { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Yaml { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::EnvVar { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Conn { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Join { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::ToStr { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Diesel { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::ActixWeb { ctx, src } => write!(f, "{}: {:?}", ctx, src),
-            Self::Uuid { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::DenoAny { ctx, src } => write!(f, "{}: {}", ctx, src),
-            Self::Poison { ctx } => write!(f, "{}", ctx),
-            Self::Generic { ctx } => write!(f, "{}", ctx),
+            Self::Any(msg) => write!(f, "{}", msg),
         }
     }
 }
@@ -150,4 +97,8 @@ impl Display for HandlerErrorMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.get_message().unwrap_or(""))
     }
+}
+
+pub fn any_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
+    Err(CustomError::Any(msg.into()).into())
 }

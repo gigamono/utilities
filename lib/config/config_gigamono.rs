@@ -1,7 +1,6 @@
 use super::config::Meta;
-use crate::messages::error::SystemError;
-use crate::result::Result;
 use crate::nested_struct;
+use crate::result::{Context, Result};
 use serde::Deserialize;
 use std::{env, fs};
 
@@ -38,7 +37,7 @@ nested_struct! {
                 }),
             }),
         }),
-        ui (UI {
+        web_ui (WebUI {
             dir (String),
         }),
         logs (Logs {
@@ -56,25 +55,20 @@ pub struct EnabledSubscriptions {
 
 impl GigamonoConfig {
     pub fn new(config_str: &str) -> Result<Self> {
-        serde_yaml::from_str(&config_str).map_err(|err| SystemError::Yaml {
-            ctx: "deserializing gigamono config".to_string(),
-            src: err,
-        })
+        serde_yaml::from_str(&config_str).context("deserializing gigamono config")
         // TODO: Default values.
     }
 
     pub fn load() -> Result<Self> {
         let env_var = super::constants::GIGAMONO_CONFIG_PATH_ENV_VAR;
 
-        let path = env::var(env_var).map_err(|err| SystemError::EnvVar {
-            ctx: format!(r#"fetching gigamono config env var, "{}""#, env_var),
-            src: err,
-        })?;
+        let path = env::var(env_var).context(format!(
+            r#"fetching gigamono config env var, "{}""#,
+            env_var
+        ))?;
 
-        let file_content = fs::read_to_string(&path).map_err(|err| SystemError::Io {
-            ctx: format!(r#"reading gigamono config file, "{}""#, &path),
-            src: err,
-        })?;
+        let file_content = fs::read_to_string(&path)
+            .context(format!(r#"reading gigamono config file, "{}""#, &path))?;
 
         Self::new(&file_content)
     }

@@ -1,4 +1,7 @@
-use crate::{http::HttpRequest, messages::error::SystemError, result::Result};
+use crate::{
+    http::HttpRequest,
+    result::{Context, Result},
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -17,13 +20,9 @@ impl Payload {
 }
 
 pub fn serialize(payload: &Payload) -> Result<Vec<u8>> {
-    bincode::serialize(payload).map_err(|_| SystemError::Generic {
-        ctx: "unable to serialize payload".to_string(),
-    })
+    bincode::serialize(payload).context("unable to serialize payload")
 }
 
 pub fn deserialize(bytes: impl AsRef<[u8]>) -> Result<Payload> {
-    bincode::deserialize(bytes.as_ref()).map_err(|_| SystemError::Generic {
-        ctx: "unable to deserialize bytes to payload".to_string(),
-    })
+    bincode::deserialize(bytes.as_ref()).context("unable to deserialize bytes to payload")
 }
