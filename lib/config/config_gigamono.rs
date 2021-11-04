@@ -56,7 +56,7 @@ pub struct EnabledSubscriptions {
 impl GigamonoConfig {
     pub fn new(config_str: &str) -> Result<Self> {
         serde_yaml::from_str(&config_str).context("deserializing gigamono config")
-        // TODO: Default values.
+        // TODO(appcypher): Default values.
     }
 
     pub fn load() -> Result<Self> {

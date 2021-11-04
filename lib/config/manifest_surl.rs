@@ -17,6 +17,6 @@ impl SurlManifest {
     }
 
     pub fn load_config() -> Self {
-        todo!()
+        todo!("appcypher")
     }
 }

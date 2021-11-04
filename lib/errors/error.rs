@@ -17,6 +17,7 @@ pub type SystemError = anyhow::Error;
 #[derive(Debug)]
 pub enum CustomError {
     Any(Cow<'static, str>),
+    Permissions(Cow<'static, str>),
 }
 
 #[derive(Debug)]
@@ -54,6 +55,7 @@ impl Display for CustomError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
             Self::Any(msg) => write!(f, "{}", msg),
+            Self::Permissions(msg) => write!(f, "{}", msg),
         }
     }
 }
@@ -101,4 +103,8 @@ impl Display for HandlerErrorMessage {
 
 pub fn any_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
     Err(CustomError::Any(msg.into()).into())
+}
+
+pub fn permission_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
+    Err(CustomError::Permissions(msg.into()).into())
 }
