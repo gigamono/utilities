@@ -105,6 +105,10 @@ pub fn any_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
     Err(CustomError::Any(msg.into()).into())
 }
 
+pub fn wrap_error<T: Error + Send + Sync + 'static>(msg: impl Into<Cow<'static, str>>, err: T) -> Result<(), SystemError> {
+    Err(anyhow::Error::new(err).context(msg.into()))
+}
+
 pub fn permission_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
     Err(CustomError::Permissions(msg.into()).into())
 }
