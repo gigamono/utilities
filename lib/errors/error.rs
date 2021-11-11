@@ -1,17 +1,11 @@
-use actix_web::{
-    dev::Body,
-    error::ResponseError,
-    http::{header, StatusCode},
-    web::{BytesMut, HttpResponse},
-};
-use std::{
-    borrow::Cow,
-    error::Error,
-    fmt::{Display, Write},
-};
+use std::{borrow::Cow, error::Error, fmt::Display};
 use strum::EnumMessage;
 use strum_macros::EnumMessage;
 
+use crate::http::StatusCode;
+
+/// Represents any kind of error that can occur system-wide.
+/// It wraps every other error.
 pub type SystemError = anyhow::Error;
 
 #[derive(Debug)]
@@ -28,11 +22,9 @@ pub enum HandlerError {
     },
     Client {
         ctx: HandlerErrorMessage,
-        code: StatusCode,
+        code: StatusCode, // For HTTP handlers.
         src: SystemError,
     },
-    /// For cases where the handler can't even send a response back but we have to return a HandlerError anyway.
-    Critical { src: SystemError },
 }
 
 #[derive(Debug, EnumMessage)]
@@ -47,6 +39,8 @@ pub enum HandlerErrorMessage {
     BadRequest,
     #[strum(message = "one of authorisation or middleware failed")]
     AuthMiddleware,
+    #[strum(message = "resource not found")]
+    NotFound,
 }
 
 impl Error for CustomError {}
@@ -60,38 +54,25 @@ impl Display for CustomError {
     }
 }
 
-impl Display for HandlerError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl HandlerError {
+    pub fn status_code(&self) -> u16 {
         match &self {
-            Self::Internal { ctx, .. } => write!(f, "{}", ctx),
-            Self::Client { ctx, .. } => write!(f, "{}", ctx),
-            Self::Critical { src, .. } => write!(f, "{}", src),
+            Self::Client { code, .. } => code.to_u16(),
+            _ => StatusCode::InternalServerError.to_u16(),
         }
+    }
+
+    pub fn error_json(&self) -> String {
+        format!(r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#, self)
     }
 }
 
-impl ResponseError for HandlerError {
-    fn status_code(&self) -> StatusCode {
+impl Display for HandlerError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Self::Internal { .. } => StatusCode::INTERNAL_SERVER_ERROR,
-            Self::Client { code, .. } => *code,
-            Self::Critical { .. } => unreachable!(),
+            Self::Client { ctx, .. } => write!(f, "{}", ctx),
+            Self::Internal { ctx, .. } => write!(f, "{}", ctx),
         }
-    }
-
-    fn error_response(&self) -> HttpResponse {
-        let mut resp = HttpResponse::new(self.status_code());
-        let mut buf = BytesMut::new();
-        let _ = write!(
-            &mut buf,
-            r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#,
-            self
-        );
-        resp.headers_mut().insert(
-            header::CONTENT_TYPE,
-            header::HeaderValue::from_static("application/json; charset=utf-8"),
-        );
-        resp.set_body(Body::from(buf))
     }
 }
 
@@ -99,16 +80,4 @@ impl Display for HandlerErrorMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.get_message().unwrap_or(""))
     }
-}
-
-pub fn any_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
-    Err(CustomError::Any(msg.into()).into())
-}
-
-pub fn wrap_error<T: Error + Send + Sync + 'static>(msg: impl Into<Cow<'static, str>>, err: T) -> Result<(), SystemError> {
-    Err(anyhow::Error::new(err).context(msg.into()))
-}
-
-pub fn permission_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
-    Err(CustomError::Permissions(msg.into()).into())
 }

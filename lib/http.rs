@@ -1,8 +1,5 @@
 mod constants;
-mod http;
+mod status_code;
 
 pub use constants::*;
-pub use http::*;
-
-// Re-export.
-pub use actix_web::http::StatusCode;
+pub use status_code::*;
