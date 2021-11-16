@@ -48,8 +48,11 @@ impl Error for CustomError {}
 impl Display for CustomError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Self::Any(msg) => write!(f, "{}", msg),
-            Self::Permissions(msg) => write!(f, "{}", msg),
+            Self::Any(msg) => f.debug_tuple("CustomError::Any").field(msg).finish(),
+            Self::Permissions(msg) => f
+                .debug_tuple("CustomError::Permissions")
+                .field(msg)
+                .finish(),
         }
     }
 }
@@ -63,21 +66,18 @@ impl HandlerError {
     }
 
     pub fn error_json(&self) -> String {
-        format!(r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#, self)
-    }
-}
+        let ctx = match self {
+            Self::Client { ctx, ..} => ctx,
+            Self::Internal { ctx, ..} => ctx,
+        };
 
-impl Display for HandlerError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match &self {
-            Self::Client { ctx, .. } => write!(f, "{}", ctx),
-            Self::Internal { ctx, .. } => write!(f, "{}", ctx),
-        }
+        format!(r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#, ctx)
     }
 }
 
 impl Display for HandlerErrorMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Returning only the message because that is what the client needs to see.
         write!(f, "{}", self.get_message().unwrap_or(""))
     }
 }
