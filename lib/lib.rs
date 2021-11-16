@@ -1,9 +1,9 @@
-pub mod natsio;
 pub mod config;
 pub mod database;
-pub mod files;
 pub mod errors;
-pub mod result;
-pub mod setup;
+pub mod files;
 pub mod http;
 pub mod macros;
+pub mod natsio;
+pub mod result;
+pub mod setup;

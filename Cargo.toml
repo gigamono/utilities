@@ -25,6 +25,7 @@ strum_macros = "0.22.0"
 uuid = "0.8.2"
 bincode = "1.3.3"
 anyhow = "1.0"
+parking_lot = "0.11.2"
 
 [lib]
 name = "utilities"

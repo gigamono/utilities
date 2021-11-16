@@ -1,8 +1,8 @@
-use std::sync::Mutex;
+use parking_lot::Mutex;
 
 use crate::config::GigamonoConfig;
 use crate::database::DB;
-use crate::result::{Result, Context};
+use crate::result::{Context, Result};
 
 use diesel::pg::PgConnection;
 
@@ -21,7 +21,8 @@ impl SharedSetup {
         let config = GigamonoConfig::load()?;
 
         let broker_url = &config.broker.url;
-        let nats = async_nats::connect(broker_url).await
+        let nats = async_nats::connect(broker_url)
+            .await
             .context(format!(r#"connecting to broker, "{}""#, broker_url))?;
 
         Ok(Self { nats, config })

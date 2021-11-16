@@ -67,8 +67,8 @@ impl HandlerError {
 
     pub fn error_json(&self) -> String {
         let ctx = match self {
-            Self::Client { ctx, ..} => ctx,
-            Self::Internal { ctx, ..} => ctx,
+            Self::Client { ctx, .. } => ctx,
+            Self::Internal { ctx, .. } => ctx,
         };
 
         format!(r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#, ctx)
