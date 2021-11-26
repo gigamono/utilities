@@ -1,3 +1,5 @@
+// Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
+
 use crate::result::{Context, Result};
 use std::fs::{File, OpenOptions};
 

@@ -1,3 +1,5 @@
+// Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
+
 use std::{borrow::Cow, error::Error, fmt::Display};
 use strum::EnumMessage;
 use strum_macros::EnumMessage;

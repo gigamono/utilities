@@ -1,3 +1,5 @@
+// Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
+
 /// Provides a nice way of expressing nested structs but defines all of them at the top-level.
 ///
 /// You need `use serde::Deserialize;` to use this because it was written to make yaml config structs easier to write.

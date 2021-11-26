@@ -211,12 +211,15 @@ checksum = "3ee2393c4a91429dffb4bedf19f4d6abf27d8a732c8ce4980305d782e5426d57"
 
 [[package]]
 name = "deno_core"
-version = "0.105.0"
+version = "0.108.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0feee776e862528e41735b80a7d1ee075ad69a1ef2589ba315b16dba76c73ce7"
 dependencies = [
  "anyhow",
  "futures",
  "indexmap",
  "lazy_static",
+ "libc",
  "log",
  "parking_lot",
  "pin-project",
@@ -540,9 +543,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.104"
+version = "0.2.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b2f96d100e1cf1929e7719b7edb3b90ab5298072638fccd77be9ce942ecdfce"
+checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
 
 [[package]]
 name = "linked-hash-map"
@@ -973,6 +976,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_bytes"
+version = "0.11.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16ae07dd2f88a366f15bd0632ba725227018c69a1c8550a927324f8eb8368bb9"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "serde_derive"
 version = "1.0.130"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -997,9 +1009,12 @@ dependencies = [
 
 [[package]]
 name = "serde_v8"
-version = "0.16.0"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "553c5043ec7045888861b3b09ead24e73f9e264f5b06dcb735ed11e0d13d59d8"
 dependencies = [
  "serde",
+ "serde_bytes",
  "v8",
 ]
 
@@ -1236,6 +1251,7 @@ dependencies = [
  "bincode",
  "deno_core",
  "diesel",
+ "parking_lot",
  "serde",
  "serde_yaml",
  "strum",
@@ -1252,9 +1268,9 @@ checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
 
 [[package]]
 name = "v8"
-version = "0.33.0"
+version = "0.34.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b3adb16fd1af3e28d6fda8348a6d96b5363a128dc5a0216b137b64ecbae6641"
+checksum = "102e1d6d3654edf9624ad2b05458bb2e91c05c9275ec92b2a282b18cc840620b"
 dependencies = [
  "bitflags",
  "fslock",

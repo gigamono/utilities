@@ -1,6 +1,9 @@
+// Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
+
 pub mod config;
 pub mod database;
 pub mod errors;
+pub mod events;
 pub mod files;
 pub mod http;
 pub mod macros;
