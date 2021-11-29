@@ -3,7 +3,6 @@
 pub mod config;
 pub mod database;
 pub mod errors;
-pub mod events;
 pub mod files;
 pub mod http;
 pub mod macros;

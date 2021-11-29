@@ -13,7 +13,7 @@ pub struct SharedSetup {
     pub config: GigamonoConfig,
 }
 
-pub struct APISetup {
+pub struct RouterSetup {
     pub common: SharedSetup,
     pub db: Mutex<DB<PgConnection>>, // SQliteConnection contains Cell/RefCell
 }
@@ -31,7 +31,7 @@ impl SharedSetup {
     }
 }
 
-impl APISetup {
+impl RouterSetup {
     pub async fn new() -> Result<Self> {
         let common = SharedSetup::new().await?;
         let db = Mutex::new(DB::connect(&common.config.engines.api.db_url)?);
