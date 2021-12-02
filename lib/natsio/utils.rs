@@ -24,3 +24,10 @@ pub fn get_first_from_headers(msg: &Arc<Message>, key: impl AsRef<str>) -> Resul
 
     Ok(value.clone())
 }
+
+pub fn has_header_key(msg: &Message, key: impl AsRef<str>) -> bool {
+    match msg.headers.as_ref() {
+        Some(headers) => headers.contains_key(key.as_ref()),
+        None => false,
+    }
+}

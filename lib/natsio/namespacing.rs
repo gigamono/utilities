@@ -1,5 +1,7 @@
 // Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
 
+// TODO(appcypher): Support group index. e.g. "v1.run_surl.workspaces.1.*"
+
 use std::fmt::Display;
 
 use crate::config::GigamonoConfig;
@@ -18,7 +20,7 @@ impl Display for WorkspacesAction {
     }
 }
 
-pub fn get_workpace_subject<'a>(
+pub fn create_workpaces_subject<'a>(
     config: &GigamonoConfig,
     action: WorkspacesAction,
     id: Option<&str>,
