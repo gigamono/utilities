@@ -8,17 +8,17 @@ use crate::result::{Context, Result};
 
 use diesel::pg::PgConnection;
 
-pub struct SharedSetup {
+pub struct CommonSetup {
     pub nats: async_nats::Connection,
     pub config: GigamonoConfig,
 }
 
-pub struct RouterSetup {
-    pub common: SharedSetup,
+pub struct ProxySetup {
+    pub common: CommonSetup,
     pub db: Mutex<DB<PgConnection>>, // SQliteConnection contains Cell/RefCell
 }
 
-impl SharedSetup {
+impl CommonSetup {
     pub async fn new() -> Result<Self> {
         let config = GigamonoConfig::load()?;
 
@@ -31,10 +31,10 @@ impl SharedSetup {
     }
 }
 
-impl RouterSetup {
+impl ProxySetup {
     pub async fn new() -> Result<Self> {
-        let common = SharedSetup::new().await?;
-        let db = Mutex::new(DB::connect(&common.config.engines.api.db_url)?);
+        let common = CommonSetup::new().await?;
+        let db = Mutex::new(DB::connect(&common.config.engines.proxy.workspaces_db_url)?);
         Ok(Self { common, db })
     }
 }

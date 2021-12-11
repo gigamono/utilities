@@ -2,12 +2,10 @@
 
 mod constants;
 mod namespacing;
-mod streamer;
 mod utils;
 
 pub use constants::*;
 pub use namespacing::*;
-pub use streamer::*;
 pub use utils::*;
 
 // Re-export.

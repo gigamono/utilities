@@ -17,12 +17,12 @@ nested_struct! {
             }),
         }),
         engines (Engines {
-            api (API {
+            proxy (Proxy {
                 port (u16),
-                db_url (String),
-                reply_timeout (u64),
+                workspaces_db_url (String),
             }),
             backend (Backend {
+                port (u16),
                 root_path (String),
                 subscriptions (BackendSubscriptions {
                     workspaces (BackendWorkspaces {
@@ -56,11 +56,6 @@ pub struct EnabledSubscriptions {
 }
 
 impl GigamonoConfig {
-    pub fn new(config_str: &str) -> Result<Self> {
-        // TODO(appcypher): Default values. Validation (version, type, etc)
-        serde_yaml::from_str(&config_str).context("deserializing gigamono config")
-    }
-
     pub fn load() -> Result<Self> {
         let env_var = super::constants::GIGAMONO_CONFIG_PATH_ENV_VAR;
 
@@ -72,6 +67,11 @@ impl GigamonoConfig {
         let file_content = fs::read_to_string(&path)
             .context(format!(r#"reading gigamono config file, "{}""#, &path))?;
 
-        Self::new(&file_content)
+        Self::try_from(&file_content)
+    }
+
+    pub fn try_from(config_str: &str) -> Result<Self> {
+        // TODO(appcypher): Default values. Validation (version, type, etc)
+        serde_yaml::from_str(&config_str).context("deserializing gigamono config")
     }
 }

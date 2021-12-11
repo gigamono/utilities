@@ -1,5 +1,6 @@
 // Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
 
+use hyper::{Body, Response};
 use std::{borrow::Cow, error::Error, fmt::Display};
 use strum::EnumMessage;
 use strum_macros::EnumMessage;
@@ -13,7 +14,9 @@ pub type SystemError = anyhow::Error;
 #[derive(Debug)]
 pub enum CustomError {
     Any(Cow<'static, str>),
-    Permissions(Cow<'static, str>),
+    Permission(Cow<'static, str>),
+    Type(Cow<'static, str>),
+    Missing(Cow<'static, str>),
 }
 
 #[derive(Debug)]
@@ -51,10 +54,9 @@ impl Display for CustomError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
             Self::Any(msg) => f.debug_tuple("CustomError::Any").field(msg).finish(),
-            Self::Permissions(msg) => f
-                .debug_tuple("CustomError::Permissions")
-                .field(msg)
-                .finish(),
+            Self::Type(msg) => f.debug_tuple("CustomError::Type").field(msg).finish(),
+            Self::Missing(msg) => f.debug_tuple("CustomError::Missing").field(msg).finish(),
+            Self::Permission(msg) => f.debug_tuple("CustomError::Permission").field(msg).finish(),
         }
     }
 }
@@ -62,8 +64,8 @@ impl Display for CustomError {
 impl HandlerError {
     pub fn status_code(&self) -> u16 {
         match &self {
-            Self::Client { code, .. } => code.to_u16(),
-            _ => StatusCode::InternalServerError.to_u16(),
+            Self::Client { code, .. } => code.as_u16(),
+            _ => StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
         }
     }
 
@@ -74,6 +76,17 @@ impl HandlerError {
         };
 
         format!(r#"{{ "errors": [ {{ "message": "{}" }} ] }}"#, ctx)
+    }
+
+    pub fn as_hyper_response(&self) -> Response<Body> {
+        Response::new(Body::from(self.error_json()))
+    }
+
+    pub fn system_error(&self) -> &SystemError {
+        match &self {
+            Self::Client { src, .. } => src,
+            Self::Internal { src, .. } => src,
+        }
     }
 }
 

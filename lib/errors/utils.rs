@@ -8,14 +8,26 @@ use super::{CustomError, SystemError};
 pub fn wrap_error<T: Error + Send + Sync + 'static>(
     msg: impl Into<Cow<'static, str>>,
     err: T,
-) -> Result<(), SystemError> {
-    Err(SystemError::new(err).context(msg.into()))
+) -> SystemError {
+    SystemError::new(err).context(msg.into())
 }
 
-pub fn any_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
+pub fn new_error(msg: impl Into<Cow<'static, str>>) -> SystemError {
+    CustomError::Any(msg.into()).into()
+}
+
+pub fn new_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
     Err(CustomError::Any(msg.into()).into())
 }
 
-pub fn permission_error(msg: impl Into<Cow<'static, str>>) -> Result<(), SystemError> {
-    Err(CustomError::Permissions(msg.into()).into())
+pub fn permission_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
+    Err(CustomError::Permission(msg.into()).into())
+}
+
+pub fn type_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
+    Err(CustomError::Type(msg.into()).into())
+}
+
+pub fn missing_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
+    Err(CustomError::Missing(msg.into()).into())
 }

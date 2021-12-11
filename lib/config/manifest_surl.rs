@@ -14,7 +14,7 @@ nested_struct! {
 }
 
 impl SurlManifest {
-    pub fn new(config_str: &String) -> Result<Self> {
+    pub fn try_from(config_str: &str) -> Result<Self> {
         // TODO(appcypher): Default values. Validation (version, type, etc)
         serde_yaml::from_str(&config_str).context("deserializing surl manifest")
     }
