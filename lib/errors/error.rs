@@ -17,6 +17,7 @@ pub enum CustomError {
     Permission(Cow<'static, str>),
     Type(Cow<'static, str>),
     Missing(Cow<'static, str>),
+    LimitExceeded(Cow<'static, str>),
 }
 
 #[derive(Debug)]
@@ -57,6 +58,10 @@ impl Display for CustomError {
             Self::Type(msg) => f.debug_tuple("CustomError::Type").field(msg).finish(),
             Self::Missing(msg) => f.debug_tuple("CustomError::Missing").field(msg).finish(),
             Self::Permission(msg) => f.debug_tuple("CustomError::Permission").field(msg).finish(),
+            Self::LimitExceeded(msg) => f
+                .debug_tuple("CustomError::LimitExceeded")
+                .field(msg)
+                .finish(),
         }
     }
 }

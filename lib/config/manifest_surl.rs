@@ -9,7 +9,13 @@ nested_struct! {
     SurlManifest {
         meta (Meta),
         permissions (Permissions),
-        middlewares (Vec<String>),
+        middlewares (Vec<Middleware>),
+    }
+}
+
+nested_struct! {
+    Middleware {
+        script (String)
     }
 }
 

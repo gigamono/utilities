@@ -31,3 +31,7 @@ pub fn type_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemErr
 pub fn missing_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
     Err(CustomError::Missing(msg.into()).into())
 }
+
+pub fn limit_exceeded_error_t<T>(msg: impl Into<Cow<'static, str>>) -> Result<T, SystemError> {
+    Err(CustomError::LimitExceeded(msg.into()).into())
+}
