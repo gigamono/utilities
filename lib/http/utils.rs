@@ -1,7 +1,10 @@
 // Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
 
+use std::any::Any;
+
 use anyhow::Context;
-use hyper::{Body, Request};
+use hyper::{Body, Request, Response};
+use log::error;
 
 use crate::{
     errors::{self, HandlerError, HandlerErrorMessage, SystemError},
@@ -44,4 +47,21 @@ pub fn internal_error(err: SystemError) -> HandlerError {
         ctx: HandlerErrorMessage::InternalError,
         src: err,
     }
+}
+
+pub fn handle_panic_error_t<T>(err: Box<dyn Any + Send>) -> std::result::Result<Response<Body>, T> {
+    // Guess error type.
+    let error_str = if let Some(s) = err.downcast_ref::<&str>() {
+        *s
+    } else {
+        "undetermined panic error type"
+    };
+
+    // Log error and return server error.
+    error!("{:?}", error_str);
+    Ok(HandlerError::Internal {
+        src: errors::new_error(format!("{:?}", error_str)),
+        ctx: errors::HandlerErrorMessage::InternalError,
+    }
+    .as_hyper_response())
 }

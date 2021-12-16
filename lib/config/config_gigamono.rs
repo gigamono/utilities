@@ -21,6 +21,10 @@ nested_struct! {
                 port (u16),
                 workspaces_db_url (String),
             }),
+            workspace (Workspace {
+                port (u16),
+                workspaces_db_url (String),
+            }),
             backend (Backend {
                 port (u16),
                 root_path (String),

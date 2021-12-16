@@ -84,7 +84,11 @@ impl HandlerError {
     }
 
     pub fn as_hyper_response(&self) -> Response<Body> {
-        Response::new(Body::from(self.error_json()))
+        Response::builder()
+            .header("Content-Type", "application/json")
+            .status(self.status_code())
+            .body(Body::from(self.error_json()))
+            .unwrap()
     }
 
     pub fn system_error(&self) -> &SystemError {

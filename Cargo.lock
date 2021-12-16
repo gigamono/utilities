@@ -1364,6 +1364,7 @@ dependencies = [
  "deno_core",
  "diesel",
  "hyper",
+ "log",
  "parking_lot",
  "serde",
  "serde_yaml",
