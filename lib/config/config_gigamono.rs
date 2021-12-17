@@ -18,15 +18,15 @@ nested_struct! {
         }),
         engines (Engines {
             proxy (Proxy {
-                port (u16),
+                socket_address (String),
                 workspaces_db_url (String),
             }),
             workspace (Workspace {
-                port (u16),
+                socket_address (String),
                 workspaces_db_url (String),
             }),
             backend (Backend {
-                port (u16),
+                socket_address (String),
                 root_path (String),
                 subscriptions (BackendSubscriptions {
                     workspaces (BackendWorkspaces {
