@@ -50,7 +50,6 @@ nested_struct! {
             file (String),
             is_published (String),
         }),
-        domain (String),
     }
 }
 

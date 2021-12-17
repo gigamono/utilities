@@ -9,3 +9,4 @@ pub mod macros;
 pub mod natsio;
 pub mod result;
 pub mod setup;
+pub mod ip;
