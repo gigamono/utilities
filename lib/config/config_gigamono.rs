@@ -30,7 +30,7 @@ nested_struct! {
                 root_path (String),
                 subscriptions (BackendSubscriptions {
                     workspaces (BackendWorkspaces {
-                        run_surl (Vec<String>),
+                        run_api (Vec<String>),
                     }),
                 }),
             }),

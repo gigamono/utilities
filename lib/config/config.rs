@@ -12,7 +12,7 @@ pub struct Meta {
 
 nested_struct! {
     Permissions {
-        fs (FSPermissions {
+        fs (FsPermissions {
             open (Vec<String>),
             write (Vec<String>),
         }),

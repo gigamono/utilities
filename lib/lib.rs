@@ -10,3 +10,4 @@ pub mod natsio;
 pub mod result;
 pub mod setup;
 pub mod ip;
+pub mod hyper;

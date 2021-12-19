@@ -5,7 +5,7 @@ use std::{borrow::Cow, error::Error, fmt::Display};
 use strum::EnumMessage;
 use strum_macros::EnumMessage;
 
-use crate::http::StatusCode;
+use crate::hyper::StatusCode;
 
 /// Represents any kind of error that can occur system-wide.
 /// It wraps every other error.

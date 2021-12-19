@@ -5,6 +5,3 @@ mod utils;
 
 pub use constants::*;
 pub use utils::*;
-
-// Re-exports.
-pub use hyper::*;

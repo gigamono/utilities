@@ -6,10 +6,13 @@ use crate::result::{Context, Result};
 use serde::Deserialize;
 
 nested_struct! {
-    SurlManifest {
+    ApiManifest {
         meta (Meta),
         permissions (Permissions),
         middlewares (Vec<Middleware>),
+        authentication (Authentication {
+            enabled(bool)
+        })
     }
 }
 
@@ -19,9 +22,9 @@ nested_struct! {
     }
 }
 
-impl SurlManifest {
+impl ApiManifest {
     pub fn try_from(config_str: &str) -> Result<Self> {
         // TODO(appcypher): Default values. Validation (version, type, etc)
-        serde_yaml::from_str(&config_str).context("deserializing surl manifest")
+        serde_yaml::from_str(&config_str).context("deserializing api manifest")
     }
 }

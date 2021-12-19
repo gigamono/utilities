@@ -3,7 +3,7 @@
 mod config;
 mod config_gigamono;
 pub mod constants;
-mod manifest_surl;
+mod manifest_api;
 
 pub use config_gigamono::*;
-pub use manifest_surl::*;
+pub use manifest_api::*;
