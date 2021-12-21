@@ -1,13 +1,16 @@
 // Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
 
-use super::config::{Meta, Permissions};
+use super::config::Permissions;
 use crate::nested_struct;
 use crate::result::{Context, Result};
 use serde::Deserialize;
 
 nested_struct! {
     AppManifest {
-        meta (Meta),
+        meta (Meta {
+            kind (String),
+            version (String),
+        }),
         permissions (Permissions),
     }
 }

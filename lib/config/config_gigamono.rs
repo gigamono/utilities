@@ -1,6 +1,5 @@
 // Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
 
-use super::config::Meta;
 use crate::nested_struct;
 use crate::result::{Context, Result};
 use serde::Deserialize;
@@ -8,7 +7,10 @@ use std::{env, fs};
 
 nested_struct! {
     GigamonoConfig {
-        meta (Meta),
+        meta (Meta {
+            kind (String),
+            version (String),
+        }),
         broker (Broker {
             url (String),
             subscriptions (Subscriptions {

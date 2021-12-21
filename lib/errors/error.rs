@@ -47,6 +47,10 @@ pub enum HandlerErrorMessage {
     AuthMiddleware,
     #[strum(message = "resource not found")]
     NotFound,
+    #[strum(message = "expected a GET method")]
+    GetMethodExpected,
+    #[strum(message = "invalid file path")]
+    InvalidFilePath,
 }
 
 impl Error for CustomError {}
