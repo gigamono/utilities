@@ -12,11 +12,20 @@ nested_struct! {
             version (String),
             runtime_version (String),
         }),
-        permissions (Permissions),
+
+        #[serde(default)]
+        permissions (Option<Permissions>),
+
+        #[serde(default)]
         middlewares (Vec<Middleware>),
-        authentication (Authentication {
-            enabled(bool)
-        })
+
+        #[serde(default)]
+        authentication (
+            #[derive(Default)]
+            Authentication {
+                enabled (bool)
+            }
+        )
     }
 }
 

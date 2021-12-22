@@ -6,9 +6,23 @@ use crate::nested_struct;
 
 nested_struct! {
     Permissions {
-        fs (FsPermissions {
-            open (Vec<String>),
-            write (Vec<String>),
-        }),
+        #[serde(default)]
+        fs (
+            #[derive(Default)]
+            FsPermissions {
+                open (Vec<String>),
+                read (Vec<String>),
+                write (Vec<String>),
+            }
+        ),
+
+        #[serde(default)]
+        http_event (
+            #[derive(Default)]
+            HttpEvent {
+                read_request (Vec<String>),
+                send_request (Vec<String>),
+            }
+        ),
     }
 }

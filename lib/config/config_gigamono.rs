@@ -11,46 +11,49 @@ nested_struct! {
             kind (String),
             version (String),
         }),
-        broker (Broker {
-            url (String),
-            subscriptions (Subscriptions {
-                workspaces (EnabledSubscriptions),
-                logs (EnabledSubscriptions),
-            }),
-        }),
+
+        #[serde(default)]
+        broker (
+            Broker {
+                socket_address (String),
+            }
+        ),
+
         engines (Engines {
-            proxy (Proxy {
-                socket_address (String),
-                workspaces_db_url (String),
-            }),
-            workspace (Workspace {
-                socket_address (String),
-                workspaces_db_url (String),
-            }),
-            backend (Backend {
-                socket_address (String),
-                root_path (String),
-                subscriptions (BackendSubscriptions {
-                    workspaces (BackendWorkspaces {
-                        run_api (Vec<String>),
-                    }),
-                }),
-            }),
-            db (DB {
-                db_url (String),
-                subscriptions (DBSubscriptions {
-                    workspaces (DBWorkspaces {
-                        query (Vec<String>),
-                    }),
-                }),
-            }),
+            #[serde(default)]
+            proxy (
+                Proxy {
+                    socket_address (String),
+                }
+            ),
+
+            #[serde(default)]
+            workspace (
+                Workspace {
+                    socket_address (String),
+                }
+            ),
+
+            backend (
+                Backend {
+                    #[serde(default = "Backend::default_sock_addr")]
+                    socket_address (String),
+
+                    root_path (String),
+
+                    #[serde(default)]
+                    runtime (
+                        #[derive(Default)]
+                        Runtime {
+                            enable_snapshot (bool)
+                        }
+                    ),
+                }
+            ),
         }),
+
         web_ui (WebUI {
             dir (String),
-        }),
-        logs (Logs {
-            file (String),
-            is_published (String),
         }),
     }
 }
@@ -78,5 +81,35 @@ impl GigamonoConfig {
     pub fn try_from(config_str: &str) -> Result<Self> {
         // TODO(appcypher): Default values. Validation (version, type, etc)
         serde_yaml::from_str(&config_str).context("deserializing gigamono config")
+    }
+}
+
+impl Backend {
+    pub fn default_sock_addr() -> String {
+        "127.0.0.1:5052".into()
+    }
+}
+
+impl Default for Broker {
+    fn default() -> Self {
+        Self {
+            socket_address: "nats://127.0.0.1:4222".into(),
+        }
+    }
+}
+
+impl Default for Proxy {
+    fn default() -> Self {
+        Self {
+            socket_address: "127.0.0.1:5050".into(),
+        }
+    }
+}
+
+impl Default for Workspace {
+    fn default() -> Self {
+        Self {
+            socket_address: "127.0.0.1:5051".into(),
+        }
     }
 }
