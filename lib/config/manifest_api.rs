@@ -21,7 +21,6 @@ nested_struct! {
 
         #[serde(default)]
         authentication (
-            #[derive(Default)]
             Authentication {
                 enabled (bool)
             }
@@ -39,5 +38,11 @@ impl ApiManifest {
     pub fn try_from(config_str: &str) -> Result<Self> {
         // TODO(appcypher): Default values. Validation (version, type, etc)
         serde_yaml::from_str(&config_str).context("deserializing api manifest")
+    }
+}
+
+impl Default for Authentication {
+    fn default() -> Self {
+        Self { enabled: true }
     }
 }

@@ -10,8 +10,13 @@ nested_struct! {
         fs (
             #[derive(Default)]
             FsPermissions {
+                #[serde(default)]
                 open (Vec<String>),
+
+                #[serde(default)]
                 read (Vec<String>),
+
+                #[serde(default)]
                 write (Vec<String>),
             }
         ),
@@ -20,8 +25,11 @@ nested_struct! {
         http_event (
             #[derive(Default)]
             HttpEvent {
-                read_request (Vec<String>),
-                send_request (Vec<String>),
+                #[serde(default)]
+                read_request (bool),
+
+                #[serde(default)]
+                send_request (bool),
             }
         ),
     }
