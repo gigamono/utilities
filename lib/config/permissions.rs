@@ -21,6 +21,9 @@ nested_struct! {
 
                 #[serde(default)]
                 write (Vec<String>),
+
+                #[serde(default)]
+                execute (Vec<String>),
             }
         ),
 
