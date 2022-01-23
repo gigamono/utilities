@@ -39,6 +39,9 @@ nested_struct! {
                     #[serde(default = "Backend::default_sock_addr")]
                     socket_address (String),
 
+                    #[serde(default = "Backend::default_sock_addr")]
+                    db_url (String),
+
                     root_path (String),
 
                     #[serde(default)]
