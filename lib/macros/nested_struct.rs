@@ -1,4 +1,4 @@
-// Copyright 2021 the Gigamono authors. All rights reserved. Apache 2.0 license.
+// Copyright 2021 the Gigamono authors. All rights reserved. GPL-3.0 License.
 
 /// Provides a nice way of expressing nested structs but defines all of them at the top-level.
 ///
