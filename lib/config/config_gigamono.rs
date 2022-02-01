@@ -22,32 +22,32 @@ nested_struct! {
         engines (Engines {
             #[serde(default)]
             proxy (
-                Proxy {
+                ProxyEngine {
                     socket_address (String),
                 }
             ),
 
             #[serde(default)]
             workspace (
-                Workspace {
+                WorkspaceEngine {
                     socket_address (String),
                 }
             ),
 
-            backend (
-                Backend {
-                    #[serde(default = "Backend::default_sock_addr")]
+            runtime (
+                RuntimeEngine {
+                    #[serde(default = "RuntimeEngine::default_sock_addr")]
                     socket_address (String),
 
-                    #[serde(default = "Backend::default_sock_addr")]
+                    #[serde(default = "RuntimeEngine::default_sock_addr")]
                     db_url (String),
 
                     root_path (String),
 
                     #[serde(default)]
-                    runtime (
+                    js_runtime (
                         #[derive(Default)]
-                        Runtime {
+                        JsRuntime {
                             enable_snapshot (bool)
                         }
                     ),
@@ -86,7 +86,7 @@ impl GigamonoConfig {
     }
 }
 
-impl Backend {
+impl RuntimeEngine {
     pub fn default_sock_addr() -> String {
         "127.0.0.1:5052".into()
     }
@@ -100,7 +100,7 @@ impl Default for Broker {
     }
 }
 
-impl Default for Proxy {
+impl Default for ProxyEngine {
     fn default() -> Self {
         Self {
             socket_address: "127.0.0.1:5050".into(),
@@ -108,7 +108,7 @@ impl Default for Proxy {
     }
 }
 
-impl Default for Workspace {
+impl Default for WorkspaceEngine {
     fn default() -> Self {
         Self {
             socket_address: "127.0.0.1:5051".into(),
