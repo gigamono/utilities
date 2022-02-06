@@ -55,6 +55,15 @@ nested_struct! {
             ),
         }),
 
+        #[serde(default)]
+        workspaces (
+            #[derive(Default)]
+            Workspaces {
+                multiple_on_volume (bool),
+                multiple_on_db (bool)
+            }
+        ),
+
         web_ui (WebUI {
             dir (String),
         }),
