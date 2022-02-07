@@ -11,3 +11,4 @@ pub mod natsio;
 pub mod path;
 pub mod result;
 pub mod setup;
+pub mod db;

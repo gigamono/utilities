@@ -26,6 +26,7 @@ uuid = "0.8.2"
 anyhow = "1.0"
 parking_lot = "0.11.2"
 log = "0.4.14"
+mysql = "22.0.0"
 
 [lib]
 name = "utilities"

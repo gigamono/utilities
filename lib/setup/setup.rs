@@ -10,8 +10,10 @@ pub struct CommonSetup {
 
 impl CommonSetup {
     pub async fn new() -> Result<Self> {
+        // Load gigamono config file.
         let config = GigamonoConfig::load()?;
 
+        // Connect to NATS.
         let broker_socket_address = &config.broker.socket_address;
         let nats = async_nats::connect(broker_socket_address)
             .await

@@ -34,38 +34,42 @@ nested_struct! {
                 }
             ),
 
+            #[serde(default)]
             runtime (
                 RuntimeEngine {
-                    #[serde(default = "RuntimeEngine::default_sock_addr")]
                     socket_address (String),
-
-                    #[serde(default = "RuntimeEngine::default_sock_addr")]
-                    db_url (String),
-
-                    root_path (String),
-
-                    #[serde(default)]
-                    js_runtime (
-                        #[derive(Default)]
-                        JsRuntime {
-                            enable_snapshot (bool)
-                        }
-                    ),
                 }
             ),
         }),
 
         #[serde(default)]
-        workspaces (
+        js_runtime (
             #[derive(Default)]
-            Workspaces {
-                multiple_on_volume (bool),
-                multiple_on_db (bool)
+            JsRuntime {
+                enable_snapshot (bool)
             }
         ),
 
-        web_ui (WebUI {
-            dir (String),
+        // TODO(appcypher): Support default.
+        db (
+            Database {
+                user (String),
+                host (String),
+                port (String),
+                multi_workspace (bool),
+            }
+        ),
+
+        // TODO(appcypher): Support default.
+        volume (
+            Volume {
+                root (String),
+                multi_workspace (bool),
+            }
+        ),
+
+        ui (UI {
+            root (String),
         }),
     }
 }
@@ -95,12 +99,6 @@ impl GigamonoConfig {
     }
 }
 
-impl RuntimeEngine {
-    pub fn default_sock_addr() -> String {
-        "127.0.0.1:5052".into()
-    }
-}
-
 impl Default for Broker {
     fn default() -> Self {
         Self {
@@ -121,6 +119,14 @@ impl Default for WorkspaceEngine {
     fn default() -> Self {
         Self {
             socket_address: "127.0.0.1:5051".into(),
+        }
+    }
+}
+
+impl Default for RuntimeEngine {
+    fn default() -> Self {
+        Self {
+            socket_address: "127.0.0.1:5052".into(),
         }
     }
 }
