@@ -20,6 +20,7 @@ pub enum CustomError {
     LimitExceeded(Cow<'static, str>),
 }
 
+// TODO(appcypher): Move to error/http.rs
 #[derive(Debug)]
 pub enum HandlerError {
     Internal {
@@ -33,6 +34,7 @@ pub enum HandlerError {
     },
 }
 
+// TODO(appcypher): Move to error/http.rs
 #[derive(Debug, EnumMessage)]
 pub enum HandlerErrorMessage {
     #[strum(message = "internal server error")]
