@@ -59,16 +59,7 @@ impl Error for CustomError {}
 
 impl Display for CustomError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match &self {
-            Self::Any(msg) => f.debug_tuple("CustomError::Any").field(msg).finish(),
-            Self::Type(msg) => f.debug_tuple("CustomError::Type").field(msg).finish(),
-            Self::Missing(msg) => f.debug_tuple("CustomError::Missing").field(msg).finish(),
-            Self::Permission(msg) => f.debug_tuple("CustomError::Permission").field(msg).finish(),
-            Self::LimitExceeded(msg) => f
-                .debug_tuple("CustomError::LimitExceeded")
-                .field(msg)
-                .finish(),
-        }
+        write!(f, "{:?}", self)
     }
 }
 
