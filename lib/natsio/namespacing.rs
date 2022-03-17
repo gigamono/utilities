@@ -18,4 +18,3 @@ impl Display for WorkspacesAction {
         write!(f, "{}", self.get_message().unwrap_or("[unknown]"))
     }
 }
-
