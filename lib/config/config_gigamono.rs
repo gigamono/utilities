@@ -19,6 +19,7 @@ nested_struct! {
             }
         ),
 
+        #[serde(default)]
         engines (Engines {
             #[serde(default)]
             proxy (
@@ -103,6 +104,16 @@ impl Default for Broker {
     fn default() -> Self {
         Self {
             socket_address: "nats://127.0.0.1:4222".into(),
+        }
+    }
+}
+
+impl Default for Engines {
+    fn default() -> Self {
+        Self {
+            proxy: Default::default(),
+            workspace: Default::default(),
+            runtime: Default::default(),
         }
     }
 }
